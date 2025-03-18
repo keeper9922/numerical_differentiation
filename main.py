@@ -20,6 +20,8 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   # Делаем холст с 3 графиками. Первый график - оригинальная функция.
   # Второй график - Аналитическое решение
   # Третий график - Производные по формулам из файла
+  # Объединяем, чтобы нормально отобразить этот график сверху остальных
+  plt.subplot(2, 2, (1, 2))
   # Сначала строим оригинальную функцию
   plt.plot(x, fx, linestyle='solid', linewidth=2, c="black", label="y(x)")
   plt.grid(True)  # включаем сетку, удобно
@@ -28,7 +30,7 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   plt.legend()
   plt.title('Оригинальная функция', loc="left", pad=10)  # заголовок со смещением влево
   # Первый график (аналитический)
-  plt.subplot(2, 1, 1)
+  plt.subplot(2, 2, 3)
   # Теперь строим аналитическую первую производную
   plt.plot(x, analytic_fx1, linestyle='solid', linewidth=1, c="red", label="y'(x)")
   # Теперь строим аналитическую вторую производную
@@ -41,7 +43,7 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   plt.grid(True)
   plt.legend()
   # Второй график (производные)
-  plt.subplot(2, 1, 2)
+  plt.subplot(2, 2, 4)
   # Строим график первой производной
   plt.plot(x, fx1, linestyle='solid', linewidth=1, c="red", label="f'(x)")
   # Строим график первой производной второго порядка точности
@@ -52,7 +54,7 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   plt.plot(x, fx3, linestyle='solid', linewidth=1, c="blue", label="f'''(x)")
   plt.ylabel('y(x)')  # обозначение оси ординат (y)
   plt.xlabel('x')  # обозначение оси абсцисс (x)
-  plt.title('Решение производных', loc="left", pad=10)  # заголовок со смещением влево
+  plt.title('Решение производных', loc="right", pad=10)  # заголовок со смещением вправо
   plt.grid(True)
   plt.legend()
   plt.show()
