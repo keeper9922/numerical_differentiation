@@ -44,10 +44,10 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   plt.legend()
   # Второй график (производные)
   plt.subplot(2, 2, 4)
+  # Строим график первой производной второго порядка точности
+  plt.plot(x, fx1v2, linestyle='dashed', linewidth=1, marker=".", c="#a68363", label="f'(x) (второго порядка точности)")
   # Строим график первой производной
   plt.plot(x, fx1, linestyle='solid', linewidth=1, c="red", label="f'(x)")
-  # Строим график первой производной второго порядка точности
-  plt.plot(x, fx1v2, linestyle='dashdot', linewidth=1, marker=".", c="#ff9628", label="f'(x) (второго порядка точности)")
   # Строим график третьей производной
   plt.plot(x, fx2, linestyle='solid', linewidth=1, c="green", label="f''(x)")
   # Строим график четвёртой производной
@@ -60,6 +60,9 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   # plt.show()
   if save_to_file:
     plt.savefig(f"result/{result_category}_{result_name}", dpi=1200)
+    plt.close()
+  else:
+    plt.show()
 
 def f_diff(n: int, section: list):
     a = section[0]
@@ -92,21 +95,14 @@ def f_diff(n: int, section: list):
     print(analytic_fx3)
     return x, fx, analytic_fx1, analytic_fx2, analytic_fx3, fx1, fx1v2, fx2, fx3
 
+sec = [-100, 100]
+n = abs(sec[0]) + abs(sec[1])
 graph(
-f_diff(20, [-10, 10]), True, "[-10, 10]", "n200"
+    f_diff(10000, sec)
 )
 graph(
-f_diff(200, [-10, 10]), True, "[-10, 10]", "n200"
+    f_diff(2*10000, sec)
 )
 graph(
-f_diff(2000, [-10, 10]), True, "[-10, 10]", "n2000"
-)
-graph(
-f_diff(200, [-100, 100]), True, "[-100, 100]", "n200"
-)
-graph(
-f_diff(2000, [-100, 100]), True, "[-10, 10]", "n2000"
-)
-graph(
-f_diff(20000, [-100, 100]), True, "[-10, 10]", "n20000"
+    f_diff(4*10000, sec)
 )
