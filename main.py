@@ -5,13 +5,13 @@ from funcs import *
 
 def graph(function_result: tuple[list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float]],
             save_to_file: bool = False,
-            result_folder: str = "result",
+            result_category: str = "result",
             result_name: str = "none"):
   """
   Вывод всех посчитанных графиков для выбранных значений.
   :param function_result: Результат в виде кортежа из 9 списков типа int или float. Первый список - сам x; 2, 3, 4 - аналитическое решение производных; 5, 6, 7, 8 - сами производные (где 6 - первая производная второго порядка точности)
   :param save_to_file: Сохранять ли в файл построенные графики?
-  :param result_folder: Папка, куда сохранять построенные графики
+  :param result_category: Как мы объединяем графики для разных N
   :param result_name: Название файла
   :return:
   """
@@ -28,7 +28,7 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   plt.ylabel('y(x)')  # обозначение оси ординат (y)
   plt.xlabel('x')  # обозначение оси абсцисс (x)
   plt.legend()
-  plt.title('Оригинальная функция', loc="left", pad=10)  # заголовок со смещением влево
+  plt.title('Оригинальная функция', loc="center", pad=10)  # заголовок со смещением влево
   # Первый график (аналитический)
   plt.subplot(2, 2, 3)
   # Теперь строим аналитическую первую производную
@@ -57,9 +57,9 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   plt.title('Решение производных', loc="right", pad=10)  # заголовок со смещением вправо
   plt.grid(True)
   plt.legend()
-  plt.show()
+  # plt.show()
   if save_to_file:
-    plt.savefig(f"{result_folder}/{result_name}", dpi=1200)
+    plt.savefig(f"result/{result_category}_{result_name}", dpi=1200)
 
 def f_diff(n: int, section: list):
     a = section[0]
@@ -93,5 +93,20 @@ def f_diff(n: int, section: list):
     return x, fx, analytic_fx1, analytic_fx2, analytic_fx3, fx1, fx1v2, fx2, fx3
 
 graph(
-f_diff(20, [-10, 10])
+f_diff(20, [-10, 10]), True, "[-10, 10]", "n200"
+)
+graph(
+f_diff(200, [-10, 10]), True, "[-10, 10]", "n200"
+)
+graph(
+f_diff(2000, [-10, 10]), True, "[-10, 10]", "n2000"
+)
+graph(
+f_diff(200, [-100, 100]), True, "[-100, 100]", "n200"
+)
+graph(
+f_diff(2000, [-100, 100]), True, "[-10, 10]", "n2000"
+)
+graph(
+f_diff(20000, [-100, 100]), True, "[-10, 10]", "n20000"
 )
