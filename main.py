@@ -3,7 +3,7 @@ from funcs import *
 
 
 
-def graph(function_result: tuple[list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float]],
+def graph(function_result: tuple[list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float], list[int | float]],
             save_to_file: bool = False,
             result_category: str = "result",
             result_name: str = "none"):
@@ -15,7 +15,16 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   :param result_name: Название файла
   :return:
   """
-  x, fx, analytic_fx1, analytic_fx2, analytic_fx3, fx1, fx1v2, fx2, fx3 = function_result
+  (x,
+   fx,
+   analytic_fx1,
+   analytic_fx2,
+   analytic_fx3,
+   fx1_left,
+   fx1_right,
+   fx1_center,
+   fx2,
+   fx3) = function_result
   # Всего будет 6 графиков, столько же результатов функций мы и получаем в функции.
   # Делаем холст с 3 графиками. Первый график - оригинальная функция.
   # Второй график - Аналитическая и численная первая производная
@@ -31,26 +40,17 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   plt.xlabel('x')  # обозначение оси абсцисс (x)
   plt.legend()
   plt.title('Оригинальная функция', loc="center", pad=10)  # заголовок со смещением влево
-  # Первый график (аналитический)
-  plt.subplot(3, 2, 3)
+  # Первый и второй график (левая, правая, центральная, аналитическая)
+  plt.subplot(3, 2, (3, 4))
   # Строим график первой производной
-  plt.plot(x, fx1, linestyle='solid', linewidth=1, c="red", marker='x', markersize=3, label="Численная")
+  plt.plot(x, fx1_left, linestyle='solid', linewidth=1, c="green", marker='x', markersize=1, label="Левая")
+  plt.plot(x, fx1_right, linestyle='solid', linewidth=1, c="blue", marker='x', markersize=1, label="Правая")
+  plt.plot(x, fx1_center, linestyle='solid', linewidth=1, c="red", marker='x', markersize=1, label="Центральная")
   # Теперь строим аналитическую первую производную
-  plt.plot(x, analytic_fx1, linestyle='solid', linewidth=1, c="blue", label="Аналитическая")
+  plt.plot(x, analytic_fx1, linestyle='solid', linewidth=1, c="black", marker='x', markersize=3, label="Аналитическая")
   plt.ylabel('y')  # обозначение оси ординат (y)
   plt.xlabel('x')  # обозначение оси абсцисс (x)
   plt.title('Первая производная', loc="left", pad=5)  # заголовок со смещением влево
-  plt.grid(True)
-  plt.legend()
-  # Второй график (производные)
-  plt.subplot(3, 2, 4)
-  # Строим график первой производной второго порядка точности
-  plt.plot(x, fx1v2, linestyle='solid', linewidth=1, c="red", marker='.', markersize=3, label="Численная")
-  # Теперь строим аналитическую первую производную
-  plt.plot(x, analytic_fx1, linestyle='solid', linewidth=1, c="blue", label="Аналитическая")
-  plt.ylabel('y')  # обозначение оси ординат (y)
-  plt.xlabel('x')  # обозначение оси абсцисс (x)
-  plt.title('Первая производная (второй порядок точности)', loc="right", pad=5)  # заголовок со смещением влево
   plt.grid(True)
   plt.legend()
   # Третий график (производные)
@@ -58,7 +58,7 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   # Строим график второй производной
   plt.plot(x, fx2, linestyle='solid', linewidth=1, c="red", marker='.', markersize=3,  label="Численная")
   # Теперь строим аналитическую вторую производную
-  plt.plot(x, analytic_fx2, linestyle='solid', linewidth=1, c="blue", label="Аналитическая")
+  plt.plot(x, analytic_fx2, linestyle='solid', linewidth=1, c="black", label="Аналитическая")
   plt.ylabel('y')  # обозначение оси ординат (y)
   plt.xlabel('x')  # обозначение оси абсцисс (x)
   plt.title('Вторая производная', loc="left", pad=5)  # заголовок со смещением влево
@@ -69,7 +69,7 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   # Строим график второй производной
   plt.plot(x, fx3, linestyle='solid', linewidth=1, c="red", marker='.', markersize=3,  label="Численная")
   # Теперь строим аналитическую вторую производную
-  plt.plot(x, analytic_fx3, linestyle='solid', linewidth=1, c="blue", label="Аналитическая")
+  plt.plot(x, analytic_fx3, linestyle='solid', linewidth=1, c="black", label="Аналитическая")
   plt.ylabel('y')  # обозначение оси ординат (y)
   plt.xlabel('x')  # обозначение оси абсцисс (x)
   plt.title('Третья производная', loc="right", pad=5)  # заголовок со смещением влево
@@ -82,50 +82,61 @@ def graph(function_result: tuple[list[int | float], list[int | float], list[int 
   else:
     plt.show()
 
-def f_diff(n: int, section: list):
+def f_diff(divisions: int, section: list):
     a = section[0]
     b = section[1]
-    h = (b-a)/n
+    h = (b-a)/divisions
     x = []
-    for i in range(n+1):
+    for i in range(divisions+1):
         x.append(a+i*h)
     fx = []
     analytic_fx1 = []
     analytic_fx2 = []
     analytic_fx3 = []
-    fx1 = []
-    fx1v2 = []
+    fx1_left = []
+    fx1_right = []
+    fx1_center = []
     fx2 = []
     fx3 = []
-    delta1 = []
-    delta2 = []
-    delta3 = []
-    for i in range(n+1):
+    delta_left_absolute = []
+    delta_left_relative = []
+    delta_right_absolute = []
+    delta_right_relative = []
+    delta_center_absolute = []
+    delta_center_relative = []
+    for i in range(divisions+1):
         fx.append(y(x[i]))
         analytic_fx1.append(a_y1(x[i]))
         analytic_fx2.append(a_y2(x[i]))
         analytic_fx3.append(a_y3(x[i]))
-        fx1.append(f1(x[i], h))
-        fx1v2.append(f1_v2(x[i], h))
+        fx1_left.append(f1_left(x[i], h))
+        fx1_right.append(f1_right(x[i], h))
+        fx1_center.append(f1_center(x[i], h))
         fx2.append(f2(x[i], h))
         fx3.append(f3(x[i], h))
-        delta1.append((f1(x[i], h) - y(x[i]))/f1(x[i], h))
-        delta2.append((f2(x[i], h) - y(x[i]))/f2(x[i], h))
-        delta3.append((f3(x[i], h) - y(x[i]))/f3(x[i], h))
+        delta_left_absolute.append(f1_left(x[i], h) - y(x[i]))
+        delta_left_relative.append((f1_left(x[i], h) - y(x[i])) / f1_left(x[i], h))
+        delta_right_absolute.append(f1_right(x[i], h) - y(x[i]))
+        delta_right_relative.append((f1_right(x[i], h) - y(x[i])) / f1_right(x[i], h))
+        delta_center_absolute.append(f1_center(x[i], h) - y(x[i]))
+        delta_center_relative.append((f1_center(x[i], h) - y(x[i])) / f1_center(x[i], h))
     # print(x)
     # print(fx)
     # print(analytic_fx1)
     # print(analytic_fx2)
     # print(analytic_fx3)
-    # print(delta1[0] - delta1[1], delta1[1] - delta1[2], delta1[2] - delta1[3], delta1[3] - delta1[4], delta1[4] - delta1[5])
-    # print(delta2[0] - delta2[1], delta2[1] - delta2[2], delta2[2] - delta2[3], delta2[3] - delta2[4], delta2[4] - delta2[5])
-    # print(delta3[0] - delta3[1], delta3[1] - delta3[2], delta3[2] - delta3[3], delta3[3] - delta3[4], delta3[4] - delta3[5])
-    return x, fx, analytic_fx1, analytic_fx2, analytic_fx3, fx1, fx1v2, fx2, fx3
+    print("Абсолютная погрешность (Л):", abs(delta_left_absolute[0]-delta_left_absolute[1]))
+    # print("Относительная погрешность (Л):", abs(delta_right_relative[1]-delta_right_relative[0]))
+    # print("Абсолютная погрешность (П):", abs(delta_right_absolute[1]-delta_right_absolute[0]))
+    # print("Относительная погрешность (П):", abs(delta_right_relative[1]-delta_right_relative[0]))
+    # print("Абсолютная погрешность (Ц):", abs(delta_center_absolute[1]-delta_center_absolute[0]))
+    # print("Относительная погрешность (Ц):", abs(delta_center_relative[1]-delta_center_relative[0]))
+    return x, fx, analytic_fx1, analytic_fx2, analytic_fx3, fx1_left, fx1_right, fx1_center, fx2, fx3
 
-sec = [-100, 100]
+sec = [-10, 10]
 n = abs(sec[0]) + abs(sec[1])
 graph(
-    f_diff(10000, sec)
+    f_diff(100, sec)
 )
 # graph(
 #     f_diff(2*10000, sec)
