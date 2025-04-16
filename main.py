@@ -1,6 +1,6 @@
 from graph_funcs import *
-sec = [-100, 100] # отрезок
-n = 50
+sec = [-10, 10] # отрезок
+n = 20
 # n = (abs(sec[0]) + abs(sec[1]))*10 # Кол-во разбиений (то есть для нашего sec это будет n=2000)
 print("N =", n)
 graph(n, f_diff(n, sec)) # графики n

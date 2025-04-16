@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from funcs import *
 
+
 def find_x(divisions: int, section: list[int | float]):
     a = section[0]
     b = section[1]
@@ -39,7 +40,6 @@ def f_diff(divisions: int, section: list[int | float]):
     # print(analytic_fx3)
     return x, fx, analytic_fx1, analytic_fx2, analytic_fx3, fx1_left, fx1_right, fx1_center, fx2, fx3
 
-
 def f_diff_delta(divisions: int, section: list[int | float]):
     x, h = find_x(divisions, section)
     fx = []
@@ -51,19 +51,19 @@ def f_diff_delta(divisions: int, section: list[int | float]):
     for i in range(divisions + 1):
         fx.append(y(x[i]))
         delta1_left.append(
-            abs(f1_left(x[i], h) - y(x[i])) / f1_left(x[i], h)
+            delta(f1_left, x[i], h)
         )
         delta1_right.append(
-            abs(f1_right(x[i], h) - y(x[i])) / f1_right(x[i], h)
+            delta(f1_right, x[i], h)
         )
         delta1_center.append(
-            abs(f1_center(x[i], h) - y(x[i])) / f1_center(x[i], h)
+            delta(f1_center, x[i], h)
         )
         delta2.append(
-            abs(f2(x[i], h) - y(x[i])) / f2(x[i], h)
+            delta(f2, x[i], h)
         )
         delta3.append(
-            abs(f3(x[i], h) - y(x[i])) / f3(x[i], h)
+            delta(f3, x[i], h)
         )
     return x, fx, divisions, delta1_left, delta1_right, delta1_center, delta2, delta3
 
